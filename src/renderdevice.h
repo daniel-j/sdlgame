@@ -12,4 +12,4 @@ RenderDevice* RenderDevice_create();
 bool RenderDevice_init(RenderDevice* rd, int windowWidth, int windowHeight);
 void RenderDevice_destroy(RenderDevice* rd);
 
-#endif // RENDERDEVICE_H
+#endif  // RENDERDEVICE_H

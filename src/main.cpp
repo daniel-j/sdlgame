@@ -1,14 +1,12 @@
-#include <iostream>
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#include <iostream>
 #include "renderdevice.h"
 #include "fpscounter.h"
 
-using namespace std;
-
-//Screen dimension constants
+// Screen dimension constants
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 
@@ -19,12 +17,10 @@ SDL_Texture* gTexture = NULL;
 
 TTF_Font* gFont = NULL;
 
-
-
 bool init() {
     // Initialize SDL
-    if ( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
-        printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
+    if ( SDL_Init(SDL_INIT_VIDEO) < 0 ) {
+        printf("Could not initialize SDL! SDL_Error: %s\n", SDL_GetError());
         return false;
     }
 
@@ -34,17 +30,17 @@ bool init() {
 
     // Initialize PNG loading
     int imgFlags = IMG_INIT_PNG;
-    if ( !( IMG_Init( imgFlags ) & imgFlags ) ) {
-        printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
+    if (!(IMG_Init(imgFlags) & imgFlags)) {
+        printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
         return false;
     }
 
     if (TTF_Init() == -1) {
-        printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
+        printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
         return false;
     }
 
-    gFont = TTF_OpenFont( "/usr/share/fonts/TTF/DejaVuSans.ttf", 24 );
+    gFont = TTF_OpenFont("/usr/share/fonts/TTF/DejaVuSans.ttf", 24);
     if (gFont == NULL) {
         fprintf(stderr, "SDL2_ttf error: %s\n", TTF_GetError());
         return false;
@@ -53,25 +49,27 @@ bool init() {
     return true;
 }
 
-SDL_Texture* loadTexture( std::string path ) {
+
+
+SDL_Texture* loadTexture(const char* path) {
     // The final optimized image
     SDL_Texture* texture = NULL;
 
     // Load image at specified path
-    SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
+    SDL_Surface* loadedSurface = IMG_Load(path);
     if ( loadedSurface == NULL ) {
-        printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
+        printf("Unable to load image %s! SDL_image Error: %s\n", path, IMG_GetError());
         return NULL;
     }
 
     // Convert surface to screen format
-    texture = SDL_CreateTextureFromSurface( rd->renderer, loadedSurface );
+    texture = SDL_CreateTextureFromSurface(rd->renderer, loadedSurface);
     if ( texture == NULL ) {
-        printf( "Unable to create texture from image %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+        printf("Unable to create texture from image %s! SDL Error: %s\n", path, SDL_GetError());
     }
 
     // Get rid of old loaded surface
-    SDL_FreeSurface( loadedSurface );
+    SDL_FreeSurface(loadedSurface);
 
     return texture;
 }
@@ -92,7 +90,8 @@ void close() {
     SDL_Quit();
 }
 
-void renderText(TTF_Font* font, int x, int y, const char* text, SDL_Color* color) {
+void renderText(TTF_Font* font, int x, int y,
+                const char* text, SDL_Color* color) {
     SDL_Surface* surface = TTF_RenderText_Solid(font, text, *color);
     SDL_Texture* texture = SDL_CreateTextureFromSurface(rd->renderer, surface);
     SDL_Rect pos = {x, y, surface->w, surface->h};
@@ -104,7 +103,7 @@ void renderText(TTF_Font* font, int x, int y, const char* text, SDL_Color* color
 int main(int argc, char *argv[]) {
     // Start up SDL and create window
     if (!init()) {
-        printf( "Failed to initialize!\n" );
+        printf("Failed to initialize!\n");
         close();
         return 1;
     }
@@ -123,9 +122,9 @@ int main(int argc, char *argv[]) {
     SDL_Event e;
     // init fps counter
     fpsinit();
-    while ( !quit ) {
+    while (!quit) {
         // Handle events on queue
-        while (SDL_PollEvent( &e ) != 0) {
+        while (SDL_PollEvent(&e) != 0) {
             switch (e.type) {
                 case SDL_QUIT:
                     quit = true;
@@ -155,7 +154,8 @@ int main(int argc, char *argv[]) {
         SDL_RenderCopy(rd->renderer, gTexture, NULL, NULL);
 
         // Draw fps counter
-        renderText(gFont, 0, 0, to_string(int(framespersecond)).c_str(), &textColor);
+        renderText(gFont, 0, 0, std::to_string(static_cast<int>(framespersecond)).c_str(),
+                   &textColor);
 
         SDL_RenderPresent(rd->renderer);
 

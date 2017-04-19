@@ -1,20 +1,29 @@
 #include "renderdevice.h"
 
 RenderDevice* RenderDevice_create() {
-    RenderDevice* rd = (RenderDevice*)malloc(sizeof(RenderDevice));
+    RenderDevice* rd = static_cast<RenderDevice*>(
+        malloc(sizeof(RenderDevice)));
     return rd;
 }
 
 bool RenderDevice_init(RenderDevice* rd, int windowWidth, int windowHeight) {
-    rd->window = SDL_CreateWindow("Hello SDL2", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                                  windowWidth, windowHeight, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+    rd->window = SDL_CreateWindow(
+        "Hello SDL2",
+        SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+        windowWidth, windowHeight,
+        SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
     if (rd->window == NULL) {
-        printf( "SDL Window could not be created! SDL_Error: %s\n", SDL_GetError() );
+        printf("SDL Window could not be created! SDL_Error: %s\n",
+               SDL_GetError());
         return false;
     }
-    rd->renderer = SDL_CreateRenderer(rd->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    rd->renderer = SDL_CreateRenderer(
+        rd->window,
+        -1,
+        SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (!rd->renderer) {
-        printf( "SDL Renderer could not be created! SDL_Error: %s\n", SDL_GetError() );
+        printf("SDL Renderer could not be created! SDL_Error: %s\n",
+               SDL_GetError());
         return false;
     }
     // Black

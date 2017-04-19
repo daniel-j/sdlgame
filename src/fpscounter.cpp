@@ -1,3 +1,4 @@
+#include "fpscounter.h"
 #include <SDL2/SDL.h>
 
 // FPS counter from:
@@ -32,7 +33,8 @@ float fpsupdate() {
     Uint32 count;
     Uint32 i;
 
-    // frametimesindex is the position in the array. It ranges from 0 to FRAME_VALUES.
+    // frametimesindex is the position in the array.
+    // It ranges from 0 to FRAME_VALUES.
     // This value rotates back to 0 after it hits FRAME_VALUES.
     frametimesindex = framecount % FRAME_VALUES;
 
@@ -50,10 +52,11 @@ float fpsupdate() {
 
     // Work out the current framerate
 
-    // The code below could be moved into another function if you don't need the value every frame.
+    // The code below could be moved into another function
+    // if you don't need the value every frame.
 
-    // I've included a test to see if the whole array has been written to or not. This will stop
-    // strange values on the first few (FRAME_VALUES) frames.
+    // I've included a test to see if the whole array has been written to or not
+    // This will stop strange values on the first few (FRAME_VALUES) frames.
     if (framecount < FRAME_VALUES) {
         count = framecount;
     } else {

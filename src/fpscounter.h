@@ -4,4 +4,4 @@
 void fpsinit();
 float fpsupdate();
 
-#endif // FPSCOUNTER_H
+#endif  // FPSCOUNTER_H
