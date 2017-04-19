@@ -3,13 +3,15 @@
 
 #include <SDL2/SDL.h>
 
-struct RenderDevice {
+class RenderDevice {
+ public:
     SDL_Window* window = NULL;
     SDL_Renderer* renderer = NULL;
-};
 
-RenderDevice* RenderDevice_create();
-bool RenderDevice_init(RenderDevice* rd, int windowWidth, int windowHeight);
-void RenderDevice_destroy(RenderDevice* rd);
+    RenderDevice();
+    ~RenderDevice();
+    bool init(int windowWidth, int windowHeight);
+    void destroy();
+};
 
 #endif  // RENDERDEVICE_H

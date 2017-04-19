@@ -1,10 +1,12 @@
 #include <stdio.h>
+#include <iostream>
+
+#include "renderdevice.h"
+#include "fpscounter.h"
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
-#include <iostream>
-#include "renderdevice.h"
-#include "fpscounter.h"
 
 // Screen dimension constants
 const int SCREEN_WIDTH = 640;
@@ -24,9 +26,9 @@ bool init() {
         return false;
     }
 
-    rd = RenderDevice_create();
+    rd = new RenderDevice();
 
-    RenderDevice_init(rd, SCREEN_WIDTH, SCREEN_HEIGHT);
+    rd->init(SCREEN_WIDTH, SCREEN_HEIGHT);
 
     // Initialize PNG loading
     int imgFlags = IMG_INIT_PNG;
@@ -48,8 +50,6 @@ bool init() {
 
     return true;
 }
-
-
 
 SDL_Texture* loadTexture(const char* path) {
     // The final optimized image
@@ -78,7 +78,7 @@ void close() {
     // Destroy texture
     SDL_DestroyTexture(gTexture);
     gTexture = NULL;
-    RenderDevice_destroy(rd);
+    rd->destroy();
     rd = NULL;
 
     TTF_CloseFont(gFont);
